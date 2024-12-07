@@ -10,14 +10,16 @@ java.sourceCompatibility = 21
 java.targetCompatibility = 21
 compileJava.options.encoding = 'UTF-8'
 
+var minestomCommit = "0668be90c5"
+
 java {
     withJavadocJar()
     withSourcesJar()
 }
 
 dependencies {
-    compileOnly 'net.minestom:minestom-snapshots:d760a60a5c'
-    testImplementation 'net.minestom:minestom-snapshots:d760a60a5c'
+    compileOnly 'com.github.Minestom:Minestom:' + minestomCommit
+    testImplementation 'com.github.Minestom:Minestom:' + minestomCommit
     //testImplementation 'com.github.TogAr2:MinestomFluids:b237b13a4b'
 }
 
