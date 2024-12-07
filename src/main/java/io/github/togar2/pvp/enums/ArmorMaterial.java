@@ -115,7 +115,7 @@ public enum ArmorMaterial {
 	}
 	
 	public static NamespaceID getModifierId(EquipmentSlot slot) {
-		return ModifierId.ARMOR_MODIFIERS[slot.ordinal() - 2];
+		return ModifierId.ARMOR_MODIFIERS[slot.ordinal() - 1];
 	}
 	
 	static {
