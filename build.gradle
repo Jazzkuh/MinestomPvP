@@ -10,7 +10,7 @@ java.sourceCompatibility = 21
 java.targetCompatibility = 21
 compileJava.options.encoding = 'UTF-8'
 
-var minestomCommit = "0668be90c5"
+var minestomCommit = "2065f63f82"
 
 java {
     withJavadocJar()
