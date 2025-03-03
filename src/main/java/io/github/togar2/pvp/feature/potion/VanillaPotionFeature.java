@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-import io.github.togar2.pvp.entity.projectile.ThrownPotion;
 import io.github.togar2.pvp.feature.FeatureType;
 import io.github.togar2.pvp.feature.RegistrableFeature;
 import io.github.togar2.pvp.feature.config.DefinedFeature;
@@ -107,50 +106,8 @@ public class VanillaPotionFeature implements PotionFeature, RegistrableFeature {
 			
 			tickDrinkingSounds(player);
 		});
-		
-		node.addListener(PlayerUseItemEvent.class, event -> {
-			if (event.getItemStack().material() != Material.SPLASH_POTION) return;
-			
-			ThreadLocalRandom random = ThreadLocalRandom.current();
-			ViewUtil.viewersAndSelf(event.getPlayer()).playSound(Sound.sound(
-					SoundEvent.ENTITY_SPLASH_POTION_THROW, Sound.Source.PLAYER,
-					0.5f, 0.4f / (random.nextFloat() * 0.4f + 0.8f)
-			), event.getPlayer());
-			
-			throwPotion(event.getPlayer(), event.getItemStack(), event.getHand());
-		});
-		
-		node.addListener(PlayerUseItemEvent.class, event -> {
-			if (event.getItemStack().material() != Material.LINGERING_POTION) return;
-			
-			ThreadLocalRandom random = ThreadLocalRandom.current();
-			ViewUtil.viewersAndSelf(event.getPlayer()).playSound(Sound.sound(
-					SoundEvent.ENTITY_LINGERING_POTION_THROW, Sound.Source.NEUTRAL,
-					0.5f, 0.4f / (random.nextFloat() * 0.4f + 0.8f)
-			), event.getPlayer());
-			
-			throwPotion(event.getPlayer(), event.getItemStack(), event.getHand());
-		});
 	}
-	
-	protected void throwPotion(Player player, ItemStack stack, PlayerHand hand) {
-		ThrownPotion thrownPotion = new ThrownPotion(player, effectFeature);
-		thrownPotion.setItem(stack);
-		
-		Pos position = player.getPosition().add(0, player.getEyeHeight(), 0);
-		thrownPotion.setInstance(Objects.requireNonNull(player.getInstance()), position);
-		
-		thrownPotion.shootFromRotation(position.pitch(), position.yaw(), -20, 0.5, 1.0);
-		
-		Vec playerVel = player.getVelocity();
-		thrownPotion.setVelocity(thrownPotion.getVelocity().add(playerVel.x(),
-				player.isOnGround() ? 0.0 : playerVel.y(), playerVel.z()));
-		
-		if (player.getGameMode() != GameMode.CREATIVE) {
-			player.setItemInHand(hand, stack.withAmount(stack.amount() - 1));
-		}
-	}
-	
+
 	protected void tickDrinkingSounds(Player player) {
 		ItemStack stack = player.getItemInHand(Objects.requireNonNull(player.getItemUseHand()));
 		if (stack.material() != Material.POTION) return;

@@ -127,7 +127,7 @@ public class VanillaFallFeature implements FallFeature, RegistrableFeature {
 				
 				entity.sendPacketToViewersAndSelf(new ParticlePacket(
 						Particle.BLOCK.withBlock(block),
-						false,
+						false, false,
 						newPos.x(), newPos.y(), newPos.z(),
 						0, 0, 0,
 						0.15f, particleCount
