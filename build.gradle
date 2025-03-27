@@ -4,13 +4,13 @@ plugins {
 }
 
 group = 'io.github.togar2'
-version = '1.0'
+version = '1.1'
 
 java.sourceCompatibility = 21
 java.targetCompatibility = 21
 compileJava.options.encoding = 'UTF-8'
 
-var minestomCommit = "6490538291"
+var minestomCommit = "0366b58bfe"
 
 java {
     withJavadocJar()
