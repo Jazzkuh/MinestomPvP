@@ -228,7 +228,7 @@ public class VanillaDamageFeature implements DamageFeature, RegistrableFeature {
 			// Workaround to have different types make a different sound,
 			// but only if the sound has not been changed by damage#getSound
 			if (entity instanceof Player && sound == SoundEvent.ENTITY_PLAYER_HURT) {
-				String effects = Objects.requireNonNull(damageType.registry()).effects();
+				String effects = Objects.requireNonNull(damageType.registry()).toString();
 				if (effects != null) sound = switch (effects) {
 					case "thorns" -> SoundEvent.ENCHANT_THORNS_HIT;
 					case "drowning" -> SoundEvent.ENTITY_PLAYER_HURT_DROWN;

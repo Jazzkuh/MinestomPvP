@@ -29,7 +29,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.EnchantmentList;
@@ -80,7 +80,7 @@ public class VanillaBowFeature implements BowFeature, RegistrableFeature {
 			ItemStack stack = event.getItemStack();
 			if (stack.material() != Material.BOW) return;
 			
-			EnchantmentList enchantmentList = stack.get(ItemComponent.ENCHANTMENTS);
+			EnchantmentList enchantmentList = stack.get(DataComponents.ENCHANTMENTS);
 			assert enchantmentList != null;
 			
 			boolean infinite = player.getGameMode() == GameMode.CREATIVE

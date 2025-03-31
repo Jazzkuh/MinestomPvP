@@ -26,7 +26,7 @@ import net.minestom.server.event.player.PlayerPreEatEvent;
 import net.minestom.server.event.player.PlayerTickEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Consumable;
@@ -73,10 +73,10 @@ public class VanillaFoodFeature implements FoodFeature, RegistrableFeature {
 	public void init(EventNode<EntityInstanceEvent> node) {
 		node.addListener(PlayerPreEatEvent.class, event -> {
 			if (event.getItemStack().material() != Material.MILK_BUCKET
-					&& !(event.getItemStack().has(ItemComponent.FOOD) || event.getItemStack().has(ItemComponent.CONSUMABLE)))
+					&& !(event.getItemStack().has(DataComponents.FOOD) || event.getItemStack().has(DataComponents.CONSUMABLE)))
 				return;
-			@Nullable Food foodComponent = event.getItemStack().get(ItemComponent.FOOD);
-			@Nullable Consumable consumableComponent = event.getItemStack().get(ItemComponent.CONSUMABLE);
+			@Nullable Food foodComponent = event.getItemStack().get(DataComponents.FOOD);
+			@Nullable Consumable consumableComponent = event.getItemStack().get(DataComponents.CONSUMABLE);
 			
 			// If the players hunger is full and the food is not always edible, cancel
 			// For some reason vanilla doesn't say honey is always edible but just overrides the method to always consume it
@@ -92,7 +92,7 @@ public class VanillaFoodFeature implements FoodFeature, RegistrableFeature {
 		
 		node.addListener(PlayerBeginItemUseEvent.class, event -> {
 			if (event.getItemStack().material() != Material.MILK_BUCKET
-					&& !(event.getItemStack().has(ItemComponent.FOOD) || event.getItemStack().has(ItemComponent.CONSUMABLE)))
+					&& !(event.getItemStack().has(DataComponents.FOOD) || event.getItemStack().has(DataComponents.CONSUMABLE)))
 				return;
 			
 			onFinishEating(event.getPlayer(), event.getItemStack(), event.getHand());
@@ -109,8 +109,8 @@ public class VanillaFoodFeature implements FoodFeature, RegistrableFeature {
 	protected void onFinishEating(Player player, ItemStack stack, PlayerHand hand) {
 		this.eat(player, stack);
 		
-		Food component = stack.get(ItemComponent.FOOD);
-		Consumable consumable = stack.get(ItemComponent.CONSUMABLE);
+		Food component = stack.get(DataComponents.FOOD);
+		Consumable consumable = stack.get(DataComponents.CONSUMABLE);
 		assert component != null;
 		assert consumable != null;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
@@ -180,8 +180,8 @@ public class VanillaFoodFeature implements FoodFeature, RegistrableFeature {
 			}
 		}
 		
-		if (stack.has(ItemComponent.SUSPICIOUS_STEW_EFFECTS)) {
-			SuspiciousStewEffects effects = stack.get(ItemComponent.SUSPICIOUS_STEW_EFFECTS);
+		if (stack.has(DataComponents.SUSPICIOUS_STEW_EFFECTS)) {
+			SuspiciousStewEffects effects = stack.get(DataComponents.SUSPICIOUS_STEW_EFFECTS);
 			assert effects != null;
 			for (SuspiciousStewEffects.Effect effect : effects.effects()) {
 				player.addEffect(new Potion(effect.id(), (byte) 0, effect.durationTicks(), PotionFlags.defaultFlags()));
@@ -220,7 +220,7 @@ public class VanillaFoodFeature implements FoodFeature, RegistrableFeature {
 	
 	@Override
 	public void eat(Player player, ItemStack stack) {
-		Food foodComponent = stack.get(ItemComponent.FOOD);
+		Food foodComponent = stack.get(DataComponents.FOOD);
 		if (foodComponent == null) return;
 		addFood(player, foodComponent.nutrition(), foodComponent.saturationModifier());
 	}
@@ -233,7 +233,7 @@ public class VanillaFoodFeature implements FoodFeature, RegistrableFeature {
 	protected void tickEatingSounds(Player player) {
 		ItemStack stack = player.getItemInHand(Objects.requireNonNull(player.getItemUseHand()));
 		
-		Consumable component = stack.get(ItemComponent.CONSUMABLE);
+		Consumable component = stack.get(DataComponents.CONSUMABLE);
 		if (component == null) return;
 		
 		long useTime = getUseTime(stack.material(), component);
