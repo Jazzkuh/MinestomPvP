@@ -12,6 +12,8 @@ import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerTickEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.TagKey;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,12 +51,12 @@ public class VanillaPlayerStateFeature implements PlayerStateFeature, Registrabl
 	@Override
 	public boolean isClimbing(LivingEntity entity) {
 		if (entity instanceof Player player && player.getGameMode() == GameMode.SPECTATOR) return false;
-		
-		var tag = MinecraftServer.getTagManager().getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, "minecraft:climbable");
-		assert tag != null;
-		
+
+		RegistryTag<Block> climbable = Block.staticRegistry().getTag(TagKey.ofHash("minecraft:climbable"));
+		if (climbable == null) return false;
+
 		Block block = Objects.requireNonNull(entity.getInstance()).getBlock(entity.getPosition());
-		return tag.contains(block.key());
+		return climbable.contains(block);
 	}
 	
 	@Override

@@ -18,12 +18,13 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.TagKey;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.Tag;
 
@@ -188,19 +189,18 @@ public class VanillaFallFeature implements FallFeature, RegistrableFeature {
 		
 		Point offsetDown = offset.add(0, -1, 0);
 		Block block = instance.getBlock(offsetDown);
-		
-		TagManager tagManager = MinecraftServer.getTagManager();
-		var fences = tagManager.getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, "minecraft:fences");
-		var walls = tagManager.getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, "minecraft:walls");
-		var fenceGates = tagManager.getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, "minecraft:fence_gates");
-		
-		assert fences != null;
-		assert walls != null;
-		assert fenceGates != null;
-		
-		if (fences.contains(block.key())
-				|| walls.contains(block.key())
-				|| fenceGates.contains(block.key())) {
+
+		RegistryTag<Block> fences = Block.staticRegistry().getTag(TagKey.ofHash("minecraft:fences"));
+		RegistryTag<Block> walls = Block.staticRegistry().getTag(TagKey.ofHash("minecraft:walls"));
+		RegistryTag<Block> fenceGates = Block.staticRegistry().getTag(TagKey.ofHash("minecraft:fence_gates"));
+
+		if (fences == null) return offset;
+		if (walls == null) return offset;
+		if (fenceGates == null) return offset;
+
+		if (fences.contains(block)
+				|| walls.contains(block)
+				|| fenceGates.contains(block)) {
 			return offsetDown;
 		}
 		

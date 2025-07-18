@@ -7,6 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import net.minestom.server.event.item.PlayerBeginItemUseEvent;
 import net.minestom.server.component.DataComponents;
+import net.minestom.server.registry.RegistryTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,7 +44,6 @@ import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
-import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.sound.SoundEvent;
 
 /**
@@ -144,7 +144,7 @@ public class VanillaFoodFeature implements FoodFeature, RegistrableFeature {
 					}
 					return;
 				}
-				case RemoveEffects(ObjectSet<PotionEffect> potionEffects) -> {
+				case RemoveEffects(RegistryTag<PotionEffect> potionEffects) -> {
 					player.getActiveEffects().stream().map(TimedPotion::potion).map(Potion::effect).filter(potionEffects::contains).forEach(player::removeEffect);
 					return;
 				}

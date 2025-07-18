@@ -119,12 +119,6 @@ public class VanillaDamageFeature implements DamageFeature, RegistrableFeature {
 		
 		float amount = damage.getAmount();
 		
-		if (typeInfo.freeze() && Objects.requireNonNull(MinecraftServer.getTagManager().getTag(
-						net.minestom.server.gamedata.tags.Tag.BasicType.ENTITY_TYPES, "minecraft:freeze_hurts_extra_types"))
-				.contains(entity.getEntityType().key())) {
-			amount *= 5.0F;
-		}
-		
 		if (typeInfo.damagesHelmet() && !entity.getEquipment(EquipmentSlot.HELMET).isAir()) {
 			itemDamageFeature.damageArmor(entity, damageType, amount, EquipmentSlot.HELMET);
 			amount *= 0.75F;
@@ -228,7 +222,7 @@ public class VanillaDamageFeature implements DamageFeature, RegistrableFeature {
 			// Workaround to have different types make a different sound,
 			// but only if the sound has not been changed by damage#getSound
 			if (entity instanceof Player && sound == SoundEvent.ENTITY_PLAYER_HURT) {
-				String effects = Objects.requireNonNull(damageType.registry()).toString();
+				String effects = Objects.requireNonNull(damageType).toString();
 				if (effects != null) sound = switch (effects) {
 					case "thorns" -> SoundEvent.ENCHANT_THORNS_HIT;
 					case "drowning" -> SoundEvent.ENTITY_PLAYER_HURT_DROWN;
