@@ -190,9 +190,9 @@ public class VanillaFallFeature implements FallFeature, RegistrableFeature {
 		Point offsetDown = offset.add(0, -1, 0);
 		Block block = instance.getBlock(offsetDown);
 
-		RegistryTag<Block> fences = Block.staticRegistry().getTag(TagKey.ofHash("minecraft:fences"));
-		RegistryTag<Block> walls = Block.staticRegistry().getTag(TagKey.ofHash("minecraft:walls"));
-		RegistryTag<Block> fenceGates = Block.staticRegistry().getTag(TagKey.ofHash("minecraft:fence_gates"));
+		RegistryTag<Block> fences = Block.staticRegistry().getTag(TagKey.ofHash("#minecraft:fences"));
+		RegistryTag<Block> walls = Block.staticRegistry().getTag(TagKey.ofHash("#minecraft:walls"));
+		RegistryTag<Block> fenceGates = Block.staticRegistry().getTag(TagKey.ofHash("#minecraft:fence_gates"));
 
 		if (fences == null) return offset;
 		if (walls == null) return offset;
