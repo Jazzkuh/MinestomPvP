@@ -9,7 +9,6 @@ import io.github.togar2.pvp.feature.config.CombatConfiguration;
 public class PvPConfigBuilder {
 	private AttackConfig attack;
 	private DamageConfig damage;
-	private ExplosionConfig explosion;
 	private ArmorToolConfig armorTool;
 	private FoodConfig food;
 	private PotionConfig potion;
@@ -27,7 +26,6 @@ public class PvPConfigBuilder {
 	public PvPConfigBuilder defaultOptions() {
 		attack = AttackConfig.DEFAULT;
 		damage = DamageConfig.DEFAULT;
-		explosion = ExplosionConfig.DEFAULT;
 		armorTool = ArmorToolConfig.DEFAULT;
 		food = FoodConfig.DEFAULT;
 		potion = PotionConfig.DEFAULT;
@@ -44,7 +42,6 @@ public class PvPConfigBuilder {
 	public PvPConfigBuilder legacyOptions() {
 		attack = AttackConfig.LEGACY;
 		damage = DamageConfig.LEGACY;
-		explosion = ExplosionConfig.DEFAULT;
 		armorTool = ArmorToolConfig.LEGACY;
 		food = FoodConfig.LEGACY;
 		potion = PotionConfig.LEGACY;
@@ -60,11 +57,6 @@ public class PvPConfigBuilder {
 	
 	public PvPConfigBuilder damage(DamageConfig damage) {
 		this.damage = damage;
-		return this;
-	}
-	
-	public PvPConfigBuilder explosion(ExplosionConfig explosion) {
-		this.explosion = explosion;
 		return this;
 	}
 	
@@ -95,7 +87,7 @@ public class PvPConfigBuilder {
 	
 	public PvPConfig build() {
 		return new PvPConfig(
-				attack, damage, explosion, armorTool,
+				attack, damage, armorTool,
 				food, potion, projectile, swordBlocking
 		);
 	}

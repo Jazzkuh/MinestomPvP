@@ -18,12 +18,13 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.TagKey;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.Tag;
 
@@ -178,32 +179,30 @@ public class VanillaFallFeature implements FallFeature, RegistrableFeature {
 		if (extraFallParticles) entity.setTag(EXTRA_FALL_PARTICLES, true);
 		else entity.removeTag(EXTRA_FALL_PARTICLES);
 	}
-	
-	protected Point getLandingPos(LivingEntity livingEntity, Pos position) {
-		Point offset = position.add(0, -0.2, 0);
-		Instance instance = livingEntity.getInstance();
-		
-		if (instance == null) return offset;
-		if (!instance.getBlock(offset).isAir()) return offset;
-		
-		Point offsetDown = offset.add(0, -1, 0);
-		Block block = instance.getBlock(offsetDown);
-		
-		TagManager tagManager = MinecraftServer.getTagManager();
-		var fences = tagManager.getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, "minecraft:fences");
-		var walls = tagManager.getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, "minecraft:walls");
-		var fenceGates = tagManager.getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, "minecraft:fence_gates");
-		
-		assert fences != null;
-		assert walls != null;
-		assert fenceGates != null;
-		
-		if (fences.contains(block.key())
-				|| walls.contains(block.key())
-				|| fenceGates.contains(block.key())) {
-			return offsetDown;
-		}
-		
-		return offset;
-	}
+
+    protected Point getLandingPos(LivingEntity livingEntity, Pos position) {
+        Point offset = position.add(0, -0.2, 0);
+        Instance instance = livingEntity.getInstance();
+
+        if (instance == null) return offset;
+        if (!instance.getBlock(offset).isAir()) return offset;
+
+        Point offsetDown = offset.add(0, -1, 0);
+        Block block = instance.getBlock(offsetDown);
+
+        final Registry<Block> reg = Block.staticRegistry();
+
+        var fences = reg.getTag(TagKey.ofHash("#minecraft:fences"));
+        var walls = reg.getTag(TagKey.ofHash("#minecraft:walls"));
+        var fenceGates = reg.getTag(TagKey.ofHash("#minecraft:fence_gates"));
+
+        if ((fences != null && fences.contains(block))
+                || (walls != null && walls.contains(block))
+                || (fenceGates != null && fenceGates.contains(block))) {
+            return offsetDown;
+        }
+
+        return offset;
+    }
+
 }

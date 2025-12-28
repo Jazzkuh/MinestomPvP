@@ -11,7 +11,10 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerTickEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.TagKey;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,19 +48,25 @@ public class VanillaPlayerStateFeature implements PlayerStateFeature, Registrabl
 			}
 		});
 	}
-	
-	@Override
-	public boolean isClimbing(LivingEntity entity) {
-		if (entity instanceof Player player && player.getGameMode() == GameMode.SPECTATOR) return false;
-		
-		var tag = MinecraftServer.getTagManager().getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, "minecraft:climbable");
-		assert tag != null;
-		
-		Block block = Objects.requireNonNull(entity.getInstance()).getBlock(entity.getPosition());
-		return tag.contains(block.key());
-	}
-	
-	@Override
+
+    @Override
+    public boolean isClimbing(LivingEntity entity) {
+        if (entity instanceof Player player && player.getGameMode() == GameMode.SPECTATOR) {
+            return false;
+        }
+
+        Instance instance = entity.getInstance();
+        if (instance == null) return false;
+
+        Block block = instance.getBlock(entity.getPosition());
+
+        final Registry<Block> reg = Block.staticRegistry();
+        var climbable = reg.getTag(TagKey.ofHash("#minecraft:climbable"));
+
+        return climbable != null && climbable.contains(block);
+    }
+
+    @Override
 	public @Nullable Block getLastClimbedBlock(LivingEntity entity) {
 		return entity.getTag(LAST_CLIMBED_BLOCK);
 	}

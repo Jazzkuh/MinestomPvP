@@ -2,10 +2,10 @@ package io.github.togar2.pvp.entity.projectile;
 
 import io.github.togar2.pvp.feature.effect.EffectFeature;
 import io.github.togar2.pvp.feature.enchantment.EnchantmentFeature;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.PotionContents;
@@ -34,8 +34,8 @@ public class Arrow extends AbstractArrow {
 	public void update(long time) {
 		super.update(time);
 		
-		if (onGround && stuckTime >= 600 && (!itemStack.has(ItemComponent.POTION_CONTENTS)
-				|| !Objects.equals(itemStack.get(ItemComponent.POTION_CONTENTS), PotionContents.EMPTY))) {
+		if (onGround && stuckTime >= 600 && (!itemStack.has(DataComponents.POTION_CONTENTS)
+				|| !Objects.equals(itemStack.get(DataComponents.POTION_CONTENTS), PotionContents.EMPTY))) {
 			triggerStatus((byte) 0);
 			itemStack = DEFAULT_ARROW;
 		}
@@ -56,15 +56,15 @@ public class Arrow extends AbstractArrow {
 	}
 	
 	public @NotNull PotionContents getPotion() {
-		return itemStack.get(ItemComponent.POTION_CONTENTS, PotionContents.EMPTY);
+		return itemStack.get(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
 	}
 	
 	public void setPotion(@NotNull PotionContents potion) {
-		this.itemStack = ItemStack.of(Material.TIPPED_ARROW).with(ItemComponent.POTION_CONTENTS, potion);
+		this.itemStack = ItemStack.of(Material.TIPPED_ARROW).with(DataComponents.POTION_CONTENTS, potion);
 	}
 	
 	public void addArrowEffect(CustomPotionEffect effect) {
-		this.itemStack = itemStack.with(ItemComponent.POTION_CONTENTS, (UnaryOperator<PotionContents>) potionContents -> {
+		this.itemStack = itemStack.with(DataComponents.POTION_CONTENTS, (UnaryOperator<PotionContents>) potionContents -> {
 			List<CustomPotionEffect> list = new ArrayList<>(potionContents.customEffects());
 			list.add(effect);
 			return new PotionContents(potionContents.potion(), potionContents.customColor(), list);
